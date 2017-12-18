@@ -2,10 +2,10 @@
 window.addEventListener("load", function(){
   init();
 });
-window.addEventListener("keydown", function(event){
+window.addEventListener("keydown", function(event){//als je de knop indrukt wordt deze funtie uitgevoerd
   keyeventdown(event);
 });
-window.addEventListener("keyup", function(event){
+window.addEventListener("keyup", function(event){//als je de knop los laat wordt deze functie uitegvoerd
   keyeventup(event);
 });
 //variables
@@ -13,49 +13,55 @@ var fps = 60;
 
 var blokSpeed = 400; //px
 var blokspeedperfps = blokSpeed / fps;
+
 var ballSpeed = 500;
 var ballspeedperfps = ballSpeed / fps;
+
 var blok1positie = 20;
 var blok2positie = 20;
+var bloklengte = 120;
 
 var qpressed = false;
 var apressed = false;
 var ppressed = false;
 var lpressed = false;
-var stopCalcUp1 = false;
-var stopCalcUp2 = false;
-var stopCalcDown1 = false;
-var stopCalcDown2 = false;
+
+var blok1RaaktBovenkant = false;
+var blok1RaaktOnderkant = false;
+var blok2RaaktBovenkant = false;
+var blok2RaaktOnderkant = false;
 //functions
+
+function init(){
+  setInterval(renderer, 1000 / fps); //laat de functie renderer 60 per seconde runnen
+}
+
 function renderer(){
-  //calculate opnieuw
+  //calculate de nieuwe posities aan de hand van dat iemand de knop indrukt of niet
   calculateNewPos();
-  //calculate if stopped
-  stop();
+  //calculate wanneer de verplaatsing van een blok moet worden stopgezet
+  collisionDetection();
   //render opnieuw
   updateBlok1();
   updateBlok2();
 }
-function init(){
-  setInterval(renderer, 1000 / fps);
-}
 
-function calculateNewPos(){
-    if(qpressed && !stopCalcUp1){
+function calculateNewPos(){//calculate de nieuwe posities aan de hand van dat iemand de knop indrukt of niet
+    if(qpressed && !blok1RaaktBovenkant){//als q is ingedrukt en het blok raakt niet de bovenkant
       blok1positie += -blokspeedperfps;
     }
-    if(apressed && !stopCalcDown1){
+    if(apressed && !blok1RaaktOnderkant){//als a is ingedrukt en het blok raakt niet de onderkant
       blok1positie += blokspeedperfps;
     }
-    if(ppressed && !stopCalcUp2){
+    if(ppressed && !blok2RaaktBovenkant){//als p is ingedrukt en het blok raakt niet de boventkant
       blok2positie += -blokspeedperfps;
     }
-    if(lpressed && !stopCalcDown2){
+    if(lpressed && !blok2RaaktOnderkant){//als l is ingedrukt en het blok raakt niet de onderkant
       blok2positie += blokspeedperfps;
     }
 }
 
-function keyeventdown(event){
+function keyeventdown(event){//als een key wordt ingedrukt wordt die boolean true
   switch(event.key){
     case 'q':
       qpressed = true;
@@ -71,7 +77,7 @@ function keyeventdown(event){
       break;
   }
 }
-function keyeventup(event){
+function keyeventup(event){//als een key wordt losgelaten wordt die boolean false
   switch(event.key){
     case 'q':
       qpressed = false;
@@ -87,37 +93,39 @@ function keyeventup(event){
       break;
   }
 }
-function updateBlok1(){
+function updateBlok1(){//update de postie van blok1
   var el = document.getElementById("blok1");
-  el.style.top = blok1positie + "px"; //dit moet niet uitgevoerd wordens als el.style.top kleiner of gelijk aan 1
+  el.style.top = blok1positie + "px";
 }
 
-function updateBlok2(howmuch){
+function updateBlok2(howmuch){//update de positie van blok2
   var el = document.getElementById("blok2");
   el.style.top = blok2positie + "px";
 }
 
-function stop(){
+function collisionDetection(){//kijk of de blokken de randen niet raken
+  //elementen
   var blok1 = document.getElementById("blok1");
   var blok2 = document.getElementById("blok2");
+
   if(parseInt(blok1.style.top) <= 0){
-    stopCalcUp1 = true;
+    blok1RaaktBovenkant = true;
   }else{
-    stopCalcUp1 = false;
+    blok1RaaktBovenkant = false;
   }
   if(parseInt(blok2.style.top) <= 0){
-    stopCalcUp2 = true;
+    blok2RaaktBovenkant = true;
   }else{
-    stopCalcUp2 = false;
+    blok2RaaktBovenkant = false;
   }
-  if(parseInt(blok1.style.top) >= window.innerHeight){
-    stopCalcDown1 = true;
+  if(parseInt(blok1.style.top) + bloklengte >= window.innerHeight){
+    blok1RaaktOnderkant = true;
   }else{
-    stopCalcDown1 = false;
+    blok1RaaktOnderkant = false;
   }
-  if(parseInt(blok2.style.top) >= window.innerHeight){
-    stopCalcDown2 = true;
+  if(parseInt(blok2.style.top) + bloklengte >= window.innerHeight){
+    blok2RaaktOnderkant = true;
   }else{
-    stopCalcDown2 = false;
+    blok2RaaktOnderkant = false;
   }
 }
