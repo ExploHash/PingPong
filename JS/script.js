@@ -17,7 +17,7 @@ var blokspeedperfps = blokSpeed / fps;
 var ballSpeed = 500;
 var balPositieX = 200;
 var balPositieY = 200;
-var balRichting = Math.round(Math.rand() * 90 + 45);
+var balRichting = Math.round(Math.random() * 90) + 45;
 var ballspeedperfps = ballSpeed / fps;
 
 var blok1positie = 20;
@@ -33,6 +33,11 @@ var blok1RaaktBovenkant = false;
 var blok1RaaktOnderkant = false;
 var blok2RaaktBovenkant = false;
 var blok2RaaktOnderkant = false;
+var balRaaktBovenkant = false;
+var balRaaktOnderkant = false;
+var balBreedte = 40;
+var scoreL = 0;
+var scoreR = 0;
 //functions
 
 function init(){
@@ -48,21 +53,32 @@ function renderer(){
   updateBlok1();
   updateBlok2();
   updateBal();
+  updateScorebord();
 }
 
 function calculateNewPos(){//calculate de nieuwe posities aan de hand van dat iemand de knop indrukt of niet
-    if(qpressed && !blok1RaaktBovenkant){//als q is ingedrukt en het blok raakt niet de bovenkant
-      blok1positie += -blokspeedperfps;
-    }
-    if(apressed && !blok1RaaktOnderkant){//als a is ingedrukt en het blok raakt niet de onderkant
-      blok1positie += blokspeedperfps;
-    }
-    if(ppressed && !blok2RaaktBovenkant){//als p is ingedrukt en het blok raakt niet de boventkant
-      blok2positie += -blokspeedperfps;
-    }
-    if(lpressed && !blok2RaaktOnderkant){//als l is ingedrukt en het blok raakt niet de onderkant
-      blok2positie += blokspeedperfps;
-    }
+  //blokken
+  if(qpressed && !blok1RaaktBovenkant){//als q is ingedrukt en het blok raakt niet de bovenkant
+    blok1positie += -blokspeedperfps;
+  }
+  if(apressed && !blok1RaaktOnderkant){//als a is ingedrukt en het blok raakt niet de onderkant
+    blok1positie += blokspeedperfps;
+  }
+  if(ppressed && !blok2RaaktBovenkant){//als p is ingedrukt en het blok raakt niet de boventkant
+    blok2positie += -blokspeedperfps;
+  }
+  if(lpressed && !blok2RaaktOnderkant){//als l is ingedrukt en het blok raakt niet de onderkant
+    blok2positie += blokspeedperfps;
+  }
+  //ball
+  var hoekS = 90;
+  var hoekR2 = 90 - balRichting;
+  var hoekR1 = 180 - hoekS - hoekR2;
+  var lengteS = ballspeedperfps;
+  var lengteR1 = Math.cos(hoekR2) * ballspeedperfps;
+  var lengteR2 = Math.sin(hoekR2) * ballspeedperfps;
+  balPositieX += lengteR1;
+  balPositieY += lengteR2;
 }
 
 function keyeventdown(event){//als een key wordt ingedrukt wordt die boolean true
@@ -101,7 +117,6 @@ function updateBlok1(){//update de postie van blok1
   var el = document.getElementById("blok1");
   el.style.top = blok1positie + "px";
 }
-
 function updateBlok2(howmuch){//update de positie van blok2
   var el = document.getElementById("blok2");
   el.style.top = blok2positie + "px";
@@ -110,6 +125,13 @@ function updateBal(){
   var el = document.getElementById("pingball");
   el.style.left = balPositieX + "px";
   el.style.top = balPositieY + "px";
+}
+function updateScorebord(){
+  var elL = document.getElementById("scoreL");
+  var elR = document.getElementById("scoreR");
+  elL.innerHTML = scoreL;
+  elR.innerHTML = scoreR;
+
 }
 function collisionDetection(){//kijk of de blokken de randen niet raken
   //elementen
@@ -136,4 +158,19 @@ function collisionDetection(){//kijk of de blokken de randen niet raken
   }else{
     blok2RaaktOnderkant = false;
   }
+  //ball
+}
+function hitwall() {
+  if(balPositieX <= 0){
+    scoreR++;
+  }
+  if(balPositieX + balBreedte/2 >= window.innerWidth){
+    scoreL++;
+  }
+}
+function resetscore() {
+  if(scoreL==10)
+  resetScore;
+}else{
+  !resetScore;
 }
