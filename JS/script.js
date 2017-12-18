@@ -169,8 +169,8 @@ function hitwall() {
   }
 }
 function resetscore() {
-  if(scoreL==10)
-  resetScore;
+  if(scoreL==10){
+  //resetScore();
 }else{
-  !resetScore;
+  //
 }
