@@ -15,6 +15,9 @@ var blokSpeed = 400; //px
 var blokspeedperfps = blokSpeed / fps;
 
 var ballSpeed = 500;
+var balPositieX = 200;
+var balPositieY = 200;
+var balRichting = Math.round(Math.rand() * 90 + 45);
 var ballspeedperfps = ballSpeed / fps;
 
 var blok1positie = 20;
@@ -44,6 +47,7 @@ function renderer(){
   //render opnieuw
   updateBlok1();
   updateBlok2();
+  updateBal();
 }
 
 function calculateNewPos(){//calculate de nieuwe posities aan de hand van dat iemand de knop indrukt of niet
@@ -102,7 +106,11 @@ function updateBlok2(howmuch){//update de positie van blok2
   var el = document.getElementById("blok2");
   el.style.top = blok2positie + "px";
 }
-
+function updateBal(){
+  var el = document.getElementById("pingball");
+  el.style.left = balPositieX + "px";
+  el.style.top = balPositieY + "px";
+}
 function collisionDetection(){//kijk of de blokken de randen niet raken
   //elementen
   var blok1 = document.getElementById("blok1");

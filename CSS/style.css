@@ -19,6 +19,16 @@ body{
   height:100px;
 }
 
+#scorebord {
+
+  top:5px;
+  width:120px;
+  height:40px;
+  color:blue;
+
+
+}
+
 #blok1{
   float:left;
 }
