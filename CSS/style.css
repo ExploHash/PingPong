@@ -1,10 +1,13 @@
 body{
   background-color: green;
+  overflow: hidden;
+  margin: 0;
+  padding: 0px;
 }
 
 #pingball{
   position: absolute;
-  top: 200px;
+  top: -200px;
   left: 300px;
   width: 40px;
   height: 40px;
@@ -15,7 +18,9 @@ body{
 .blok{
   position: relative;
   background-color:blue;
-  width: 40px;
+  width: 10px;
+  margin-left: 40px; /* Margin */
+  margin-right: 40px; /* Margin */
   height:100px;
 }
 
@@ -27,6 +32,19 @@ body{
   color: purple;
   position: relative;
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 50px;
+  font-family: arial;
+}
+
+#ballspeed {
+  top: 15px;
+  right: 60px;
+  height:40px;
+  color: purple;
+  position: absolute;
+  float: right;
   margin-left: auto;
   margin-right: auto;
   font-size: 50px;
